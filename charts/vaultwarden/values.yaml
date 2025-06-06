@@ -780,3 +780,126 @@ ingress:
   ##   - Add support for using cert-manager.
   ##   - Support for multiple TLS hostnames.
   ##
+## @section SSO Settings
+
+
+sso:
+  ## @param sso.enabled Activate the SSO integration
+  ##
+  enabled: false
+
+  ## @param sso.only Disable email + master password authentication
+  ##
+  only: false
+
+  ## @param sso.signupsMatchEmail If true, associate SSO signup with existing user by matching email
+  ##
+  signupsMatchEmail: true
+
+  ## @param sso.allowUnknownEmailVerification Allow unknown email verification status (CAUTION: may allow account takeover)
+  ##
+  allowUnknownEmailVerification: false
+
+  ## @param sso.authority OpenID Connect Discovery endpoint (without /.well-known/openid-configuration)
+  ## Example: https://login.example.com/auth/realms/myrealm
+  ##
+  authority: ""
+
+  ## @param sso.scopes Optional override for OpenID scopes (default "email profile")
+  ##
+  scopes: "email profile"
+
+  ## @param sso.authorizeExtraParams Optional additional parameters for authorize redirect
+  ##
+  authorizeExtraParams: ""
+
+  ## @param sso.pkce Activate PKCE for Auth Code flow (default: true)
+  ##
+  pkce: true
+
+  ## @param sso.audienceTrusted Regex pattern to trust additional audience values in ID token
+  ## Use single-quoted string if needed: '^$'
+  ##
+  audienceTrusted: ""
+
+  ## @param sso.clientId The SSO client ID to use for OpenID authentication
+  ## If empty, fill in `clientIdSecret` instead to load from Kubernetes secret
+  ##
+  clientId: ""
+
+  ## @param sso.clientIdSecret Kubernetes secret reference for the client ID
+  ## Example:
+  ##   name: vaultwarden-sso
+  ##   key: client-id
+  ##
+  clientIdSecret: {}
+  #  name: vaultwarden-sso
+  #  key: client-id
+
+  ## @param sso.clientSecret The SSO client secret (not recommended to store in plain values.yaml)
+  ## Leave empty if using clientSecretSecret
+  ##
+  clientSecret: ""
+
+  ## @param sso.clientSecretSecret Kubernetes secret reference for the client secret
+  ## Example:
+  ##   name: vaultwarden-sso
+  ##   key: client-secret
+  ##
+  clientSecretSecret: {}
+  #  name: vaultwarden-sso
+  #  key: client-secret
+
+  ## @param sso.masterPasswordPolicy Optional JSON to configure master password policy
+  ##
+  masterPasswordPolicy: ""
+
+  ## @param sso.authOnlyNotSession Enable to use SSO only for login, not session lifecycle
+  ##
+  authOnlyNotSession: false
+
+  ## @param sso.roles.enabled Enable mapping of SSO roles to Vaultwarden permissions
+  ##
+  roles:
+    enabled: false
+
+    ## @param sso.roles.defaultToUser Allow login even if roles are missing/invalid
+    ##
+    defaultToUser: true
+
+    ## @param sso.roles.tokenPath Path in ID token to extract roles from
+    ##
+    tokenPath: "/resource_access/client-id/roles"
+
+  ## @param sso.organizations.enabled Enable organization/group mapping from SSO token
+  ##
+  organizations:
+    enabled: false
+
+    ## @param sso.organizations.revocation Allow revocation of organization membership based on SSO token
+    ##
+    revocation: false
+
+    ## @param sso.organizations.tokenPath Path in ID token to extract group/org info
+    ##
+    tokenPath: ""
+
+    ## @param sso.organizations.groupsEnabled Force opt-in for group support (temporary flag)
+    ##
+    groupsEnabled: false
+
+    ## @param sso.organizations.allCollections Grant SSO users access to all collections by default
+    ##
+    allCollections: true
+
+  ## @param sso.organizationInviteAutoAccept Bypass invite acceptance logic (affects both SSO and non-SSO)
+  ##
+  organizationInviteAutoAccept: false
+
+  ## @param sso.clientCacheExpiration Cache expiration (in seconds) for OpenID discovery metadata
+  ##
+  clientCacheExpiration: 0
+
+  ## @param sso.debugTokens Log raw token contents for debugging (set LOG_LEVEL and logger filters too)
+  ##
+  debugTokens: false

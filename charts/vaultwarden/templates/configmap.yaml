@@ -122,3 +122,43 @@ data:
   EMAIL_CHANGE_ALLOWED: {{ .Values.emailChangeAllowed | quote }}
   ADMIN_RATELIMIT_SECONDS: {{ .Values.adminRateLimitSeconds | quote }}
   ADMIN_RATELIMIT_MAX_BURST: {{ .Values.adminRateLimitMaxBurst | quote }}
+
+  {{- if .Values.sso.enabled }}
+  SSO_ENABLED: {{ .Values.sso.enabled | quote }}
+  SSO_ONLY: {{ .Values.sso.only | quote }}
+  SSO_SIGNUPS_MATCH_EMAIL: {{ .Values.sso.signupsMatchEmail | quote }}
+  SSO_ALLOW_UNKNOWN_EMAIL_VERIFICATION: {{ .Values.sso.allowUnknownEmailVerification | quote }}
+  SSO_AUTHORITY: {{ .Values.sso.authority | quote }}
+  SSO_SCOPES: {{ .Values.sso.scopes | default "email profile" | quote }}
+  SSO_AUTHORIZE_EXTRA_PARAMS: {{ .Values.sso.authorizeExtraParams | default "" | quote }}
+  SSO_PKCE: {{ .Values.sso.pkce | default "true" | quote }}
+  SSO_AUDIENCE_TRUSTED: {{ .Values.sso.audienceTrusted | quote }}
+
+  {{- if .Values.sso.clientId }}
+  SSO_CLIENT_ID: {{ .Values.sso.clientId | quote }}
+  {{- else if .Values.sso.clientIdSecret }}
+  SSO_CLIENT_ID: {{ (lookup "v1" "Secret" .Release.Namespace .Values.sso.clientIdSecret.name).data.[.Values.sso.clientIdSecret.key] | b64dec | quote }}
+  {{- end }}
+
+  {{- if .Values.sso.clientSecret }}
+  SSO_CLIENT_SECRET: {{ .Values.sso.clientSecret | quote }}
+  {{- else if .Values.sso.clientSecretSecret }}
+  SSO_CLIENT_SECRET: {{ (lookup "v1" "Secret" .Release.Namespace .Values.sso.clientSecretSecret.name).data.[.Values.sso.clientSecretSecret.key] | b64dec | quote }}
+  {{- end }}
+
+  SSO_MASTER_PASSWORD_POLICY: {{ .Values.sso.masterPasswordPolicy | quote }}
+  SSO_AUTH_ONLY_NOT_SESSION: {{ .Values.sso.authOnlyNotSession | quote }}
+  SSO_ROLES_ENABLED: {{ .Values.sso.roles.enabled | quote }}
+  SSO_ROLES_DEFAULT_TO_USER: {{ .Values.sso.roles.defaultToUser | quote }}
+  SSO_ROLES_TOKEN_PATH: {{ .Values.sso.roles.tokenPath | quote }}
+
+  SSO_ORGANIZATIONS_ENABLED: {{ .Values.sso.organizations.enabled | quote }}
+  SSO_ORGANIZATIONS_REVOCATION: {{ .Values.sso.organizations.revocation | quote }}
+  SSO_ORGANIZATIONS_TOKEN_PATH: {{ .Values.sso.organizations.tokenPath | quote }}
+  SSO_ORGANIZATIONS_GROUPS_ENABLED: {{ .Values.sso.organizations.groupsEnabled | quote }}
+  SSO_ORGANIZATIONS_ALL_COLLECTIONS: {{ .Values.sso.organizations.allCollections | quote }}
+
+  ORGANIZATION_INVITE_AUTO_ACCEPT: {{ .Values.sso.organizationInviteAutoAccept | quote }}
+  SSO_CLIENT_CACHE_EXPIRATION: {{ .Values.sso.clientCacheExpiration | default "0" | quote }}
+  SSO_DEBUG_TOKENS: {{ .Values.sso.debugTokens | default "false" | quote }}
+  {{- end }}

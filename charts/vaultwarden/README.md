@@ -349,7 +349,7 @@ helm -n $NAMESPACE uninstall $RELEASE_NAME
 | ----------------------- | ----------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`        | Vaultwarden image registry                                                                | `docker.io`          |
 | `image.repository`      | Vaultwarden image repository                                                              | `vaultwarden/server` |
-| `image.tag`             | Vaultwarden image tag                                                                     | `1.33.2-alpine`      |
+| `image.tag`             | Vaultwarden image tag                                                                     | `1.34.1-alpine`      |
 | `image.pullPolicy`      | Vaultwarden image pull policy                                                             | `IfNotPresent`       |
 | `image.pullSecrets`     | Specify docker-registry secrets                                                           | `[]`                 |
 | `image.extraSecrets`    | Vaultwarden image extra secrets                                                           | `[]`                 |
@@ -564,3 +564,34 @@ helm -n $NAMESPACE uninstall $RELEASE_NAME
 | `ingress.tlsSecret`               | Kubernetes secret containing the SSL certificate when using the "nginx" class. | `""`                 |
 | `ingress.nginxAllowList`          | Comma-separated list of IP addresses and subnets to allow.                     | `""`                 |
 | `ingress.customHeadersConfigMap`  | ConfigMap containing custom headers to be added to the ingress.                | `{}`                 |
+
+### SSO Settings
+
+| Name                                | Description                                                                   | Value                              |
+| ----------------------------------- | ----------------------------------------------------------------------------- | ---------------------------------- |
+| `sso.enabled`                       | Activate the SSO integration                                                  | `false`                            |
+| `sso.only`                          | Disable email + master password authentication                                | `false`                            |
+| `sso.signupsMatchEmail`             | If true, associate SSO signup with existing user by matching email            | `true`                             |
+| `sso.allowUnknownEmailVerification` | Allow unknown email verification status (CAUTION: may allow account takeover) | `false`                            |
+| `sso.authority`                     | OpenID Connect Discovery endpoint (without /.well-known/openid-configuration) | `""`                               |
+| `sso.scopes`                        | Optional override for OpenID scopes (default "email profile")                 | `email profile`                    |
+| `sso.authorizeExtraParams`          | Optional additional parameters for authorize redirect                         | `""`                               |
+| `sso.pkce`                          | Activate PKCE for Auth Code flow (default: true)                              | `true`                             |
+| `sso.audienceTrusted`               | Regex pattern to trust additional audience values in ID token                 | `""`                               |
+| `sso.clientId`                      | The SSO client ID to use for OpenID authentication                            | `""`                               |
+| `sso.clientIdSecret`                | Kubernetes secret reference for the client ID                                 | `{}`                               |
+| `sso.clientSecret`                  | The SSO client secret (not recommended to store in plain values.yaml)         | `""`                               |
+| `sso.clientSecretSecret`            | Kubernetes secret reference for the client secret                             | `{}`                               |
+| `sso.masterPasswordPolicy`          | Optional JSON to configure master password policy                             | `""`                               |
+| `sso.authOnlyNotSession`            | Enable to use SSO only for login, not session lifecycle                       | `false`                            |
+| `sso.roles.enabled`                 | Enable mapping of SSO roles to Vaultwarden permissions                        | `false`                            |
+| `sso.roles.defaultToUser`           | Allow login even if roles are missing/invalid                                 | `true`                             |
+| `sso.roles.tokenPath`               | Path in ID token to extract roles from                                        | `/resource_access/client-id/roles` |
+| `sso.organizations.enabled`         | Enable organization/group mapping from SSO token                              | `false`                            |
+| `sso.organizations.revocation`      | Allow revocation of organization membership based on SSO token                | `false`                            |
+| `sso.organizations.tokenPath`       | Path in ID token to extract group/org info                                    | `""`                               |
+| `sso.organizations.groupsEnabled`   | Force opt-in for group support (temporary flag)                               | `false`                            |
+| `sso.organizations.allCollections`  | Grant SSO users access to all collections by default                          | `true`                             |
+| `sso.organizationInviteAutoAccept`  | Bypass invite acceptance logic (affects both SSO and non-SSO)                 | `false`                            |
+| `sso.clientCacheExpiration`         | Cache expiration (in seconds) for OpenID discovery metadata                   | `0`                                |
+| `sso.debugTokens`                   | Log raw token contents for debugging (set LOG_LEVEL and logger filters too)   | `false`                            |
